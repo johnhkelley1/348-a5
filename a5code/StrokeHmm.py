@@ -129,7 +129,7 @@ class HMM:
         t1 = []
         t2 = []
 
-        for idx, val in enumerate(s_space):
+        for val in s_space:
             t1.append([i_probs[val]*emm[val]['length'][obs[0]['length']]])
             t2.append([0])
 
@@ -146,9 +146,31 @@ class HMM:
                 t2[j].append(my_max[0])
                 j += 1
 
+        #get arg max for zt
+        z = [0]*T
+        z[T-1] = -1
+        my_max = -float("inf")
 
+        for idx,val in enumerate(t1):
+            if val[T-1] > my_max:
+                my_max = val[T-1]
+                z[T-1] = idx
 
-        return None
+        x = [0]*T
+        x[T-1] = s_space[z[T-1]]
+
+        for i in reversed(range(1,T)):
+            z[i-1] = t2[z[i]][i]
+            x[i-1] = s_space[z[i-1]]
+
+        print "tran ",tran
+        print "emm ",emm
+
+        x2 = []
+        for val in x:
+            x2.append({'label':val})
+
+        return x2
 
     def getMax(self,t_idx,state,t1,tran,emm,obs):
         '''return [argmax, max]'''
@@ -187,7 +209,7 @@ class HMM:
 
         X = self.viterbi(o_space, s_space, i_probs, obs, tran, emm)
 
-        return None
+        return X
     
     def getEmissionProb( self, state, features ):
         ''' Get P(features|state).
