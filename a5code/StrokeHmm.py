@@ -135,7 +135,7 @@ class HMM:
 
         print "t1",t1
 
-        T = len(obs) - 1
+        T = len(obs)
 
         for i in range(1,T):
             j = 0
@@ -170,7 +170,10 @@ class HMM:
         for val in x:
             x2.append({'label':val})
 
-        return x2
+        print "x: ",x
+        print "x len ",len(x)
+
+        return x
 
     def getMax(self,t_idx,state,t1,tran,emm,obs):
         '''return [argmax, max]'''
@@ -183,6 +186,18 @@ class HMM:
             arg1 = t1[idx][t_idx - 1]
             arg2 = tran[i2key[idx]][state]
             arg3 = emm[state]['length'][yi]
+
+            # if arg1 == 0:
+            #     arg1 = 1
+            # if arg2 == 0:
+            #     arg2 = 1
+            # if arg3 == 0:
+            #     arg3 = 1
+
+            # arg1 = math.fabs(arg1)
+            # arg2 = math.fabs(arg2)
+            # arg3 = math.fabs(arg3)
+
             test_max = arg1 * arg2 * arg3
 
             if(test_max > my_max):
@@ -206,6 +221,7 @@ class HMM:
 
         obs = data
         print "our data" + str(obs)
+        print "data_len ", len(obs)
 
         X = self.viterbi(o_space, s_space, i_probs, obs, tran, emm)
 
@@ -632,7 +648,7 @@ class Stroke:
 def test():
     x = StrokeLabeler()
     x.trainHMMDir("../trainingFiles/")
-    x.labelFile("../trainingFiles/0128_1.6.1.labeled.xml", "results.txt")
+    x.labelFile("../trainingFiles/1357_2.9.1.labeled.xml", "results.txt")
 
 test()
 
