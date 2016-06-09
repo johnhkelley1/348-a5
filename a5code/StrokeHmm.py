@@ -130,7 +130,7 @@ class HMM:
         t2 = []
 
         for val in s_space:
-            t1.append([i_probs[val]*emm[val]['length'][obs[0]['length']]])
+            t1.append([i_probs[val]*self.getEmissionProb(val,obs[0])])
             t2.append([0])
 
         print "t1",t1
@@ -185,7 +185,7 @@ class HMM:
             yi = obs[t_idx]['length']
             arg1 = t1[idx][t_idx - 1]
             arg2 = tran[i2key[idx]][state]
-            arg3 = emm[state]['length'][yi]
+            arg3 = self.getEmissionProb(state,obs[t_idx])
 
             # if arg1 == 0:
             #     arg1 = 1
@@ -194,9 +194,9 @@ class HMM:
             # if arg3 == 0:
             #     arg3 = 1
 
-            # arg1 = math.fabs(arg1)
-            # arg2 = math.fabs(arg2)
-            # arg3 = math.fabs(arg3)
+            # arg1 = math.log(math.fabs(arg1))
+            # arg2 = math.log(math.fabs(arg2))
+            # arg3 = math.log(math.fabs(arg3))
 
             test_max = arg1 * arg2 * arg3
 
